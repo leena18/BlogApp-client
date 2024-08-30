@@ -1,0 +1,99 @@
+body {
+    background-color: #1b1b32;
+    color: #fff;
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    background: #22223b;
+    padding: 20px 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+h1 {
+    font-size: 2em;
+    margin-bottom: 20px;
+    color: #8e9aaf;
+}
+
+.input-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+label {
+    font-size: 1em;
+    margin-bottom: 5px;
+    color: #9a8c98;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: none;
+    border-radius: 5px;
+    background-color: #2a2a45;
+    color: #fff;
+    font-size: 1em;
+    box-shadow: 0 0 5px #3a0ca3;
+    outline: none;
+    transition: box-shadow 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+textarea:focus {
+    box-shadow: 0 0 10px #7209b7;
+}
+
+textarea {
+    resize: none;
+}
+
+.glow-button {
+    background-color: #3a0ca3;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: white;
+    font-size: 1em;
+    cursor: pointer;
+    box-shadow: 0 0 10px #3a0ca3, 0 0 20px #3a0ca3, 0 0 30px #3a0ca3;
+    transition: box-shadow 0.3s ease;
+    margin-top: 10px;
+    width: 100%;
+}
+
+.glow-button:hover {
+    box-shadow: 0 0 20px #7209b7, 0 0 30px #7209b7, 0 0 40px #7209b7;
+}
+
+.login-link {
+    margin-top: 20px;
+    font-size: 0.9em;
+    color: #8e9aaf;
+}
+
+.login-link a {
+    color: #3a0ca3;
+    text-decoration: none;
+}
+
+.login-link a:hover {
+    text-decoration: underline;
+}

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+
+<body>
+    <header>
+        <h1>User Dashboard</h1>
+        <button id="logoutButton">Logout</button>
+    </header>
+
+    <section class="content">
+        <div class="post-list">
+            <h2>Your Posts</h2>
+            <ul id="posts"></ul>
+        </div>
+
+        <div class="create-post">
+            <h2>Create New Post</h2>
+            <form id="createPostForm">
+                <label for="title">Title:</label>
+                <input type="text" id="title" required>
+
+                <label for="subtitle">Subtitle:</label>
+                <input type="text" id="subtitle" required>
+
+                <label for="body">Body:</label>
+                <textarea id="body" rows="10" required></textarea>
+
+                <label for="imageLink">Image Link:</label>
+                <input type="url" id="imageLink">
+
+                <button type="submit">Create Post</button>
+            </form>
+        </div>
+    </section>
+
+    <section id="article-details" style="display: none;">
+        <h2>Article Details</h2>
+        <div id="articleContent">
+            <h3 id="articleTitle"></h3>
+            <h4 id="articleSubtitle"></h4>
+            <p id="articleBody"></p>
+            <img id="articleImage" src="" alt="Article Image" style="max-width: 100%; height: auto;">
+        </div>
+        <button id="editArticleButton">Edit</button>
+        <button id="deleteArticleButton">Delete</button>
+        <button id="backToDashboardButton">Back to Dashboard</button>
+    </section>
+
+    <script src="javascript/dashboard.js"></script>
+</body>
+
+</html>

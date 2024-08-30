@@ -1,0 +1,100 @@
+/* Global Styles */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #0d0d0d;
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    color: #00c6ff;
+    font-size: 32px;
+    margin-bottom: 20px;
+}
+
+.form-container {
+    background-color: #1a1a1a;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #00c6ff;
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #00c6ff;
+    font-weight: bold;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #00c6ff;
+    border-radius: 5px;
+    background-color: #1a1a1a;
+    color: #ffffff;
+    font-size: 16px;
+    outline: none;
+}
+
+.input-group input:focus {
+    border-color: #00ffff;
+    box-shadow: 0 0 10px #00c6ff;
+}
+
+.glow-on-hover {
+    width: 100%;
+    padding: 12px 0;
+    margin-top: 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #00c6ff;
+    color: #1a1a1a;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.glow-on-hover:hover {
+    box-shadow: 0 0 20px #00c6ff, 0 0 30px #00c6ff, 0 0 40px #00c6ff;
+}
+
+p {
+    text-align: center;
+    margin-top: 20px;
+    color: #00c6ff;
+}
+
+p a {
+    color: #00c6ff;
+    text-decoration: none;
+}
+
+p a:hover {
+    text-decoration: underline;
+}
+
+/* Error message styling */
+.error-message {
+    color: red;
+    visibility: hidden;
+    font-size: 12px;
+    margin-top: 5px;
+}

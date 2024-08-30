@@ -1,0 +1,129 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #333;
+    color: white;
+    padding: 10px;
+    text-align: center;
+    position: relative;
+}
+
+header h1 {
+    margin: 0;
+}
+
+#logoutButton {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+#logoutButton:hover {
+    background-color: #d32f2f;
+}
+
+.content {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px;
+}
+
+.post-list, .create-post {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    width: 45%;
+}
+
+.post-list ul {
+    list-style: none;
+    padding: 0;
+}
+
+.post-list li {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+}
+
+.post-list li:hover {
+    background-color: #f0f0f0;
+}
+
+.post-list li:last-child {
+    border-bottom: none;
+}
+
+.create-post form {
+    display: flex;
+    flex-direction: column;
+}
+
+.create-post label {
+    margin-bottom: 5px;
+}
+
+.create-post input, .create-post textarea {
+    margin-bottom: 15px;
+    padding: 8px;
+    border-radius: 3px;
+    border: 1px solid #ddd;
+    width: 100%;
+}
+
+.create-post button {
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.create-post button:hover {
+    background-color: #45a049;
+}
+
+#article-details {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    width: 45%;
+    display: none;
+}
+
+#article-details h2 {
+    margin-top: 0;
+}
+
+#article-details img {
+    max-width: 100%;
+    height: auto;
+}
+
+#article-details button {
+    margin-right: 10px;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+#article-details button:hover {
+    background-color: #45a049;
+}
