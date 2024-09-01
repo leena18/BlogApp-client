@@ -59,10 +59,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 readMoreLink.classList.add('read-more');
                 readMoreLink.textContent = 'Read Full Article';
 
+                console.log(featuredArticle);
                 // Add author name
                 const authorName = document.createElement('p');
                 authorName.classList.add('author-name');
-                authorName.textContent = `By ${featuredArticle.author.name}`;
+                authorName.textContent = `By ${featuredArticle.author.username}`;
 
                 // Append elements to the featured post content wrapper
                 featuredContentWrapper.appendChild(featuredPostTitle);

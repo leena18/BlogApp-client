@@ -1,233 +1,207 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const articleContainer = document.getElementById('articleContainer');
-    const token = sessionStorage.getItem('token');
-    const successMessage = document.getElementById('successMessage');
-    const errorMessage = document.getElementById('errorMessage');
-    const logoutButton = document.getElementById('logoutButton');
+const baseURL = 'http://localhost:8080';
+let articleEntity = {};
 
-    // Modal Elements
-    const deleteConfirmationModal = document.getElementById('deleteConfirmationModal');
-    const saveConfirmationModal = document.getElementById('saveConfirmationModal');
-    const editFormModal = document.getElementById('editFormModal');
-    const closeModal = document.querySelectorAll('.close-modal');
-    const confirmDeleteButton = document.getElementById('confirmDeleteButton');
-    const cancelDeleteButton = document.getElementById('cancelDeleteButton');
-    const confirmSaveButton = document.getElementById('confirmSaveButton');
-    const cancelSaveButton = document.getElementById('cancelSaveButton');
-
-    // Edit form elements
-    const editTitle = document.getElementById('editTitle');
-    const editSubtitle = document.getElementById('editSubtitle');
-    const editBody = document.getElementById('editBody');
-    const cancelEditButton = document.getElementById('cancelEditButton');
-    const saveEditButton = document.getElementById('saveEditButton');
-
-    let editorInstance;
-
-    // Initialize CKEditor for the edit form
-    ClassicEditor.create(editBody)
-        .then(editor => {
-            editorInstance = editor;
-        })
-        .catch(error => {
-            console.error('There was a problem initializing the CKEditor:', error);
-        });
-
-    // Extract Article ID from URL
+// Function to get the 'id' parameter from the URL
+function getArticleIdFromUrl() {
     const urlParams = new URLSearchParams(window.location.search);
-    const articleId = urlParams.get('id');
+    return urlParams.get('id');
+}
 
-    if (!token) {
-        window.location.href = 'login.html'; // Redirect to login if not authenticated
-        return;
-    }
-
-    if (!articleId) {
-        articleContainer.innerHTML = '<p>Invalid article ID.</p>';
-        return;
-    }
-
-    // Function to fetch and display article
-    function fetchArticle() {
-        fetch(`http://localhost:8080/articles/${articleId}`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(response => {
-            if (response.status === 404) {
-                throw new Error('Article not found.');
-            }
-            if (!response.ok) {
-                throw new Error('Failed to fetch article.');
-            }
-            return response.json();
-        })
-        .then(article => {
-            renderArticle(article);
-        })
-        .catch(error => {
-            console.error('Error fetching article:', error);
-            articleContainer.innerHTML = `<p>${error.message}</p>`;
-        });
-    }
-
-    // Function to render article in the DOM
-    function renderArticle(article) {
-        const currentUserId = sessionStorage.getItem('userId'); // Assuming user ID is stored in sessionStorage
-        const isAuthor = currentUserId && currentUserId == article.author.id;
-
-        // Build the HTML
-        const articleHTML = `
-            <img src="${article.imageLink || 'images/default-image.jpg'}" alt="${article.title}" class="article-image">
-            <h1 class="article-title">${article.title}</h1>
-            <h3 class="article-subtitle">${article.subtitle || ''}</h3>
-            <div class="article-body">${article.body}</div>
-            ${isAuthor ? `
-                <div class="action-buttons">
-                    <button class="edit-button" id="editButton"><i class="fas fa-edit"></i> Edit</button>
-                    <button class="delete-button" id="deleteButton"><i class="fas fa-trash-alt"></i> Delete</button>
-                </div>
-            ` : ''}
-        `;
-
-        articleContainer.innerHTML = articleHTML;
-
-        // Attach event listeners to buttons if author
-        if (isAuthor) {
-            const editButton = document.getElementById('editButton');
-            const deleteButton = document.getElementById('deleteButton');
-
-            editButton.addEventListener('click', () => {
-                openEditForm(article);
-            });
-
-            deleteButton.addEventListener('click', () => {
-                openDeleteModal();
-            });
+// Function to fetch article by ID
+async function fetchArticleById(id) {
+    try {
+        const response = await fetch(`${baseURL}/articles/${id}`);
+        if (!response.ok) {
+            throw new Error('Failed to fetch the article');
         }
+        const article = await response.json();
+        articleEntity = article;
+        displayArticle(article);
+        populateEditModal(article);
+        fetchComments(article.slug);
+    } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('post-title').innerText = 'Failed to load article';
     }
+}
 
-    // Function to open the edit form in a modal
-    function openEditForm(article) {
-        editTitle.value = article.title;
-        editSubtitle.value = article.subtitle || '';
-        editorInstance.setData(article.body);
+// Function to display the fetched article
+function displayArticle(article) {
+    document.getElementById('post-title').innerText = article.title;
+    document.getElementById('post-subtitle').innerText = article.subtitle;
+    document.getElementById('post-image').src = article.imageLink || 'default-image.jpg';
+    document.getElementById('post-author').innerText = article.author.username;
+    document.getElementById('post-date').innerText = new Date(article.createdAt).toLocaleDateString();
+    document.getElementById('post-body').innerHTML = article.body;
+}
 
-        editFormModal.style.display = 'block';
+// Function to populate the edit modal with article data
+function populateEditModal(article) {
+    document.getElementById('edit-title').value = article.title;
+    document.getElementById('edit-subtitle').value = article.subtitle;
+    document.getElementById('edit-body').value = article.body;
+    document.getElementById('edit-imageLink').value = article.imageLink;
+}
 
-        saveEditButton.addEventListener('click', () => {
-            openSaveModal();
-        });
-
-        cancelEditButton.addEventListener('click', () => {
-            closeModalForm();
-        });
-    }
-
-    // Close Modal Forms
-    closeModal.forEach(close => {
-        close.addEventListener('click', () => {
-            closeModalForm();
-        });
-    });
-
-    function closeModalForm() {
-        editFormModal.style.display = 'none';
-        saveConfirmationModal.style.display = 'none';
-        deleteConfirmationModal.style.display = 'none';
-    }
-
-    // Function to open the save modal
-    function openSaveModal() {
-        saveConfirmationModal.style.display = 'block';
-    }
-
-    // Function to save the article changes
-    confirmSaveButton.addEventListener('click', () => {
-        const updatedArticle = {
-            title: editTitle.value,
-            subtitle: editSubtitle.value,
-            body: editorInstance.getData()
-        };
-
-        fetch(`http://localhost:8080/articles/${articleId}`, {
+// Function to update the article
+async function updateArticle(id, updatedData) {
+    try {
+        const response = await fetch(`${baseURL}/articles/${id}`, {
             method: 'PUT',
             headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${sessionStorage.getItem('token')}`
             },
-            body: JSON.stringify(updatedArticle)
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Failed to save article.');
-            }
-            return response.json();
-        })
-        .then(article => {
-            closeModalForm();
-            fetchArticle(); // Refresh the article view
-            displaySuccessMessage('Article updated successfully!');
-        })
-        .catch(error => {
-            console.error('Error saving article:', error);
-            displayErrorMessage('Failed to save article.');
+            body: JSON.stringify(updatedData)
         });
-    });
-
-    // Delete article
-    function openDeleteModal() {
-        deleteConfirmationModal.style.display = 'block';
+        if (!response.ok) {
+            throw new Error('Failed to update the article');
+        }
+        const updatedArticle = await response.json();
+        displayArticle(updatedArticle);
+        closeModal();
+    } catch (error) {
+        console.error('Error:', error);
     }
+}
 
-    confirmDeleteButton.addEventListener('click', () => {
-        fetch(`http://localhost:8080/articles/${articleId}`, {
+// Function to delete the article
+async function deleteArticle(id) {
+    try {
+        const response = await fetch(`${baseURL}/articles/${id}`, {
             method: 'DELETE',
             headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
+                'Authorization': `Bearer ${sessionStorage.getItem('token')}`
             }
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Failed to delete article.');
-            }
-            displaySuccessMessage('Article deleted successfully!');
-            window.location.href = 'dashboard.html'; // Redirect to dashboard after deletion
-        })
-        .catch(error => {
-            console.error('Error deleting article:', error);
-            displayErrorMessage('Failed to delete article.');
         });
-    });
-
-    // Function to display success message
-    function displaySuccessMessage(message) {
-        successMessage.textContent = message;
-        successMessage.style.display = 'block';
-        setTimeout(() => {
-            successMessage.style.display = 'none';
-        }, 3000);
+        if (!response.ok) {
+            throw new Error('Failed to delete the article');
+        }
+        alert('Article deleted successfully');
+        window.location.href = '/dashboard.html'; // Redirect to the homepage after deletion
+    } catch (error) {
+        console.error('Error:', error);
     }
+}
 
-    // Function to display error message
-    function displayErrorMessage(message) {
-        errorMessage.textContent = message;
-        errorMessage.style.display = 'block';
-        setTimeout(() => {
-            errorMessage.style.display = 'none';
-        }, 3000);
+// Modal controls
+const modal = document.getElementById('editModal');
+const editBtn = document.getElementById('editBtn');
+const deleteBtn = document.getElementById('deleteBtn');
+const span = document.getElementsByClassName('close')[0];
+
+// When the user clicks the edit button, open the modal
+editBtn.onclick = function () {
+    modal.style.display = 'block';
+}
+
+// When the user clicks the delete button, confirm and delete the article
+deleteBtn.onclick = function () {
+    const confirmed = confirm('Are you sure you want to delete this article?');
+    if (confirmed) {
+        const articleId = getArticleIdFromUrl();
+        if (articleId) {
+            deleteArticle(articleId);
+        }
     }
+}
 
-    // Logout functionality
-    logoutButton.addEventListener('click', () => {
-        sessionStorage.removeItem('token');
-        window.location.href = 'login.html';
-    });
+// When the user clicks on <span> (x), close the modal
+span.onclick = function () {
+    modal.style.display = 'none';
+}
 
-    // Fetch article when the page loads
-    fetchArticle();
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function (event) {
+    if (event.target == modal) {
+        modal.style.display = 'none';
+    }
+}
+
+// Handle the edit form submission
+document.getElementById('editForm').addEventListener('submit', function (event) {
+    event.preventDefault();
+    const updatedData = {
+        title: document.getElementById('edit-title').value,
+        subtitle: document.getElementById('edit-subtitle').value,
+        body: document.getElementById('edit-body').value,
+        imageLink: document.getElementById('edit-imageLink').value
+    };
+    const articleId = getArticleIdFromUrl();
+    if (articleId) {
+        updateArticle(articleId, updatedData);
+    }
 });
+
+// Fetch article on page load
+const articleId = getArticleIdFromUrl();
+if (articleId) {
+    fetchArticleById(articleId);
+} else {
+    document.getElementById('post-title').innerText = 'Article ID not found';
+}
+
+// Fetch and display comments by article slug
+async function fetchComments(articleSlug) {
+    try {
+        const response = await fetch(`${baseURL}/articles/${articleSlug}/comments`);
+        if (!response.ok) {
+            throw new Error('Failed to fetch comments');
+        }
+        const comments = await response.json();
+        displayComments(comments);
+    } catch (error) {
+        console.error('Error fetching comments:', error);
+    }
+}
+
+// Function to display fetched comments
+function displayComments(comments) {
+    const commentsList = document.getElementById('comments-list');
+    commentsList.innerHTML = ''; // Clear previous comments
+    comments.forEach(comment => {
+        const commentElement = document.createElement('div');
+        commentElement.classList.add('comment');
+        commentElement.innerHTML = `
+            <div class="comment-meta">By ${comment.author.username} on ${new Date(comment.createdAt).toLocaleDateString()}</div>
+            <div class="comment-body">${comment.body}</div>
+        `;
+        commentsList.appendChild(commentElement);
+    });
+}
+
+// Handle the add comment form submission
+document.getElementById('addCommentForm').addEventListener('submit', async function (event) {
+    event.preventDefault();
+    const commentData = {
+        title: '',
+        body: document.getElementById('comment-body').value
+    };
+
+    const articleSlug = articleEntity.slug; // Assuming slug can be used in a similar way
+    try {
+        console.log('articleSlug:', articleSlug);
+        const response = await fetch(`${baseURL}/articles/${articleSlug}/comments`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+            },
+            body: JSON.stringify(commentData)
+        });
+        if (!response.ok) {
+            throw new Error('Failed to add comment');
+        }
+        // Refresh comments after adding a new one
+        fetchComments(articleSlug);
+        // Clear the form
+        document.getElementById('comment-body').value = '';
+    } catch (error) {
+        console.error('Error adding comment:', error);
+    }
+});
+
+// Function to close the modal
+function closeModal() {
+    modal.style.display = 'none';
+}
