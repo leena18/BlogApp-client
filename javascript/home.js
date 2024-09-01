@@ -137,6 +137,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Logout functionality
     document.getElementById('logoutBtn').addEventListener('click', function() {
         sessionStorage.clear();
-        window.location.href = 'login.html';
+        window.location.href = 'index.html';
     });
 });

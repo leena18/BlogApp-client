@@ -1,112 +1,131 @@
 /* General Styles */
 body {
     margin: 0;
-    padding: 0;
+    padding: 30px 0;
     font-family: 'Georgia', serif;
-    background-color: #f5f4f0;
-    color: #292929;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+    background-color: #fbf2d5; /* Use third-color for background */
+    color: #394a51; /* Use first-color for text */
 }
 
 .container {
-    background-color: #fff;
-    padding: 40px;
-    border-radius: 10px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    width: 400px;
-    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 10px 40px;
+    background-color: #7fa99b; /* Use second-color for container background */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 h1 {
-    font-size: 2.5rem;
-    font-weight: 700;
+    color: #394a51; /* Use first-color for headings */
     margin-bottom: 20px;
-    color: #292929;
+    font-size: 2rem;
+    text-align: center;
 }
 
+/* Input Groups */
 .input-group {
     margin-bottom: 20px;
-    text-align: left;
 }
 
 .input-group label {
     display: block;
-    margin-bottom: 5px;
-    font-weight: 500;
-    color: #292929;
+    font-size: 1rem;
+    color: #394a51; /* Use first-color for labels */
+    margin-bottom: 8px;
 }
 
 .input-group input,
 .input-group textarea {
     width: 100%;
     padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-    font-family: inherit;
-    background-color: #f9f9f9;
-    color: #292929;
-    box-sizing: border-box;
+    border: 1px solid #fdc57b; /* Use fourth-color for borders */
+    border-radius: 4px;
+    font-size: 1rem;
+    color: #394a51; /* Use first-color for text */
+    background-color: #fbf2d5; /* Use third-color for input background */
 }
 
 .input-group input:focus,
 .input-group textarea:focus {
-    border-color: #000;
+    border-color: #7fa99b; /* Use second-color for focus border */
     outline: none;
 }
 
+/* Buttons */
 .glow-button {
-    width: 100%;
-    padding: 14px;
-    background-color: #000;
-    color: #fff;
-    border: none;
-    border-radius: 25px;
-    font-size: 18px;
+    background-color: #fdc57b; /* Use fourth-color for button background */
+    color: #394a51; /* Use first-color for text */
+    padding: 8px 24px;
+    border-radius: 20px;
+    font-size: 1rem;
     font-weight: 500;
+    border: none;
     cursor: pointer;
-    transition: box-shadow 0.3s ease-in-out;
+    transition: all 0.3s ease;
+    display: block;
+    margin: 0 auto;
 }
 
 .glow-button:hover {
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    background-color: #394a51; /* Use first-color for hover background */
+    color: #fff; /* White text on hover */
 }
 
+/* Links */
 .login-link {
-    margin-top: 20px;
-    font-size: 16px;
-    color: #292929;
+    text-align: center;
 }
 
 .login-link a {
-    color: #000;
+    color: #394a51; /* Use second-color for links */
     text-decoration: none;
-    font-weight: 500;
 }
 
 .login-link a:hover {
     text-decoration: underline;
 }
 
-/* Responsive Design */
-@media (max-width: 480px) {
+/* Media Queries */
+
+/* For tablets and larger phones */
+@media (max-width: 768px) {
     .container {
-        width: 100%;
         padding: 20px;
-        box-shadow: none;
     }
 
-    h1 {
-        font-size: 2rem;
-    }
-}
-
-@media (max-width: 320px) {
     h1 {
         font-size: 1.5rem;
     }
-    
+
+    .input-group input,
+    .input-group textarea {
+        padding: 10px;
+    }
+
+    .glow-button {
+        padding: 10px 20px;
+        font-size: 0.875rem;
+    }
+}
+
+/* For small screens and mobile devices */
+@media (max-width: 480px) {
+    .container {
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 1.25rem;
+    }
+
+    .input-group input,
+    .input-group textarea {
+        padding: 8px;
+    }
+
+    .glow-button {
+        padding: 8px 16px;
+        font-size: 0.75rem;
+    }
 }

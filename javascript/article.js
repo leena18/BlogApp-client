@@ -39,7 +39,7 @@ function displayArticle(article) {
 function populateEditModal(article) {
     document.getElementById('edit-title').value = article.title;
     document.getElementById('edit-subtitle').value = article.subtitle;
-    document.getElementById('edit-body').value = article.body;
+    CKEDITOR.instances['edit-body'].setData(article.body); // Initialize CKEditor with article body
     document.getElementById('edit-imageLink').value = article.imageLink;
 }
 
@@ -59,6 +59,7 @@ async function updateArticle(id, updatedData) {
         }
         const updatedArticle = await response.json();
         displayArticle(updatedArticle);
+        showMessage('Your content has been saved successfully.');
         closeModal();
     } catch (error) {
         console.error('Error:', error);
@@ -108,28 +109,32 @@ deleteBtn.onclick = function () {
 
 // When the user clicks on <span> (x), close the modal
 span.onclick = function () {
-    modal.style.display = 'none';
+    closeModal();
 }
 
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function (event) {
     if (event.target == modal) {
-        modal.style.display = 'none';
+        closeModal();
     }
 }
 
 // Handle the edit form submission
 document.getElementById('editForm').addEventListener('submit', function (event) {
     event.preventDefault();
-    const updatedData = {
-        title: document.getElementById('edit-title').value,
-        subtitle: document.getElementById('edit-subtitle').value,
-        body: document.getElementById('edit-body').value,
-        imageLink: document.getElementById('edit-imageLink').value
-    };
-    const articleId = getArticleIdFromUrl();
-    if (articleId) {
-        updateArticle(articleId, updatedData);
+    const confirmed = confirm('Would you like to save the post?');
+    if (confirmed) {
+        const updatedData = {
+            title: document.getElementById('edit-title').value,
+            subtitle: document.getElementById('edit-subtitle').value,
+            body: CKEDITOR.instances['edit-body'].getData(), // Get CKEditor data
+            imageLink: document.getElementById('edit-imageLink').value
+        };
+        const articleId = getArticleIdFromUrl();
+        if (articleId) {
+            updateArticle(articleId, updatedData);
+        }
+        closeModal();
     }
 });
 
@@ -205,3 +210,16 @@ document.getElementById('addCommentForm').addEventListener('submit', async funct
 function closeModal() {
     modal.style.display = 'none';
 }
+
+// JavaScript for hamburger menu toggle
+document.addEventListener('DOMContentLoaded', function() {
+    const hamburger = document.querySelector('.hamburger');
+    const navLinks = document.querySelector('.nav-links');
+
+    hamburger.addEventListener('click', function() {
+        // Toggle 'active' class on navLinks
+        navLinks.classList.toggle('active');
+        // Toggle 'responsive' class on navbar
+        document.querySelector('.navbar').classList.toggle('responsive');
+    });
+});
