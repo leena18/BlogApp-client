@@ -1,59 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Dashboard</title>
+    <title>Dashboard</title>
     <link rel="stylesheet" href="css/dashboard.css">
+    <!-- CKEditor 5 -->
+    <script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/classic/ckeditor.js" id="ckeditor-script"></script>
 </head>
-
 <body>
-    <header>
-        <h1>User Dashboard</h1>
-        <button id="logoutButton">Logout</button>
-    </header>
-
-    <section class="content">
-        <div class="post-list">
-            <h2>Your Posts</h2>
-            <ul id="posts"></ul>
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="navbar-left">
+            <img src="logo.png" alt="Logo" class="logo">
         </div>
+        <div class="navbar-right">
+            <a href="homePage.html" class="nav-link">Home</a>
+            <button class="nav-button" id="createPostButton">Create New Post</button>
+            <button class="nav-button logout-button" id="logoutButton">Logout</button>
+        </div>
+    </div>
 
-        <div class="create-post">
+    <!-- Content -->
+    <div class="content">
+        <h2>Your Blog Posts</h2>
+        <div class="posts-grid" id="postsGrid">
+            <!-- Posts will be displayed here -->
+        </div>
+    </div>
+
+    <!-- Create Post Modal -->
+    <div id="createPostModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
             <h2>Create New Post</h2>
             <form id="createPostForm">
                 <label for="title">Title:</label>
-                <input type="text" id="title" required>
+                <input type="text" id="title" name="title" required>
 
                 <label for="subtitle">Subtitle:</label>
-                <input type="text" id="subtitle" required>
-
-                <label for="body">Body:</label>
-                <textarea id="body" rows="10" required></textarea>
+                <input type="text" id="subtitle" name="subtitle" required>
 
                 <label for="imageLink">Image Link:</label>
-                <input type="url" id="imageLink">
+                <input type="text" id="imageLink" name="imageLink">
 
-                <button type="submit">Create Post</button>
+                <label for="content">Content:</label>
+                <textarea id="content" name="content" style="display: none;"></textarea>
+
+                <button type="submit">Submit</button>
+                <div class="success-message" id="successMessage">Post created successfully!</div>
             </form>
         </div>
-    </section>
+    </div>
 
-    <section id="article-details" style="display: none;">
-        <h2>Article Details</h2>
-        <div id="articleContent">
-            <h3 id="articleTitle"></h3>
-            <h4 id="articleSubtitle"></h4>
-            <p id="articleBody"></p>
-            <img id="articleImage" src="" alt="Article Image" style="max-width: 100%; height: auto;">
-        </div>
-        <button id="editArticleButton">Edit</button>
-        <button id="deleteArticleButton">Delete</button>
-        <button id="backToDashboardButton">Back to Dashboard</button>
-    </section>
-
+    <!-- Script -->
     <script src="javascript/dashboard.js"></script>
 </body>
-
 </html>

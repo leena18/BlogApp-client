@@ -1,0 +1,168 @@
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #333;
+    color: white;
+}
+
+.navbar .nav-link {
+    margin: 0 10px;
+    color: white;
+    text-decoration: none;
+}
+
+.navbar .logo {
+    height: 50px;
+}
+
+/* Article Container */
+.article-container {
+    padding: 20px;
+    max-width: 800px;
+    margin: auto;
+    position: relative;
+}
+
+.article-image {
+    width: 100%;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+.article-title, .article-subtitle {
+    margin: 10px 0;
+}
+
+.article-body {
+    margin-bottom: 30px;
+}
+
+/* Author Actions */
+.author-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.action-button {
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+.action-button.delete-button {
+    background-color: #dc3545;
+}
+
+/* Edit Form Container */
+.edit-form-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.edit-form {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    width: 90%;
+    max-width: 600px;
+    position: relative;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.cancel-button, .save-button {
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+.cancel-button {
+    background-color: #6c757d;
+    color: white;
+}
+
+.save-button {
+    background-color: #28a745;
+    color: white;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+    width: 90%;
+    max-width: 400px;
+}
+
+.close-modal {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    cursor: pointer;
+    font-size: 24px;
+}
+
+/* Success and Error Messages */
+.message {
+    display: none;
+    text-align: center;
+    margin: 20px;
+    padding: 10px;
+    border-radius: 5px;
+    max-width: 600px;
+    margin: auto;
+}
+
+.success-message {
+    background-color: #28a745;
+    color: white;
+}
+
+.error-message {
+    background-color: #dc3545;
+    color: white;
+}
+
+/* Blur effect */
+.blur {
+    filter: blur(5px);
+    pointer-events: none;
+}

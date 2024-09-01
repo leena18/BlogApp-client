@@ -1,99 +1,112 @@
+/* General Styles */
 body {
-    background-color: #1b1b32;
-    color: #fff;
-    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    font-family: 'Georgia', serif;
+    background-color: #f5f4f0;
+    color: #292929;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    margin: 0;
-    padding: 0;
 }
 
 .container {
-    background: #22223b;
-    padding: 20px 30px;
+    background-color: #fff;
+    padding: 40px;
     border-radius: 10px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-    width: 100%;
-    max-width: 400px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    width: 400px;
     text-align: center;
 }
 
 h1 {
-    font-size: 2em;
+    font-size: 2.5rem;
+    font-weight: 700;
     margin-bottom: 20px;
-    color: #8e9aaf;
+    color: #292929;
 }
 
 .input-group {
-    margin-bottom: 15px;
+    margin-bottom: 20px;
     text-align: left;
 }
 
-label {
-    font-size: 1em;
+.input-group label {
+    display: block;
     margin-bottom: 5px;
-    color: #9a8c98;
+    font-weight: 500;
+    color: #292929;
 }
 
-input[type="text"],
-input[type="email"],
-input[type="password"],
-textarea {
+.input-group input,
+.input-group textarea {
     width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    border: none;
+    padding: 12px;
+    border: 1px solid #ccc;
     border-radius: 5px;
-    background-color: #2a2a45;
-    color: #fff;
-    font-size: 1em;
-    box-shadow: 0 0 5px #3a0ca3;
+    font-size: 16px;
+    font-family: inherit;
+    background-color: #f9f9f9;
+    color: #292929;
+    box-sizing: border-box;
+}
+
+.input-group input:focus,
+.input-group textarea:focus {
+    border-color: #000;
     outline: none;
-    transition: box-shadow 0.3s ease;
-}
-
-input[type="text"]:focus,
-input[type="email"]:focus,
-input[type="password"]:focus,
-textarea:focus {
-    box-shadow: 0 0 10px #7209b7;
-}
-
-textarea {
-    resize: none;
 }
 
 .glow-button {
-    background-color: #3a0ca3;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    color: white;
-    font-size: 1em;
-    cursor: pointer;
-    box-shadow: 0 0 10px #3a0ca3, 0 0 20px #3a0ca3, 0 0 30px #3a0ca3;
-    transition: box-shadow 0.3s ease;
-    margin-top: 10px;
     width: 100%;
+    padding: 14px;
+    background-color: #000;
+    color: #fff;
+    border: none;
+    border-radius: 25px;
+    font-size: 18px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: box-shadow 0.3s ease-in-out;
 }
 
 .glow-button:hover {
-    box-shadow: 0 0 20px #7209b7, 0 0 30px #7209b7, 0 0 40px #7209b7;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
 .login-link {
     margin-top: 20px;
-    font-size: 0.9em;
-    color: #8e9aaf;
+    font-size: 16px;
+    color: #292929;
 }
 
 .login-link a {
-    color: #3a0ca3;
+    color: #000;
     text-decoration: none;
+    font-weight: 500;
 }
 
 .login-link a:hover {
     text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+    .container {
+        width: 100%;
+        padding: 20px;
+        box-shadow: none;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 320px) {
+    h1 {
+        font-size: 1.5rem;
+    }
+    
 }

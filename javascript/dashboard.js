@@ -1,57 +1,98 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const postsList = document.getElementById('posts');
-    const createPostForm = document.getElementById('createPostForm');
-    const articleDetails = document.getElementById('article-details');
-    const articleTitle = document.getElementById('articleTitle');
-    const articleSubtitle = document.getElementById('articleSubtitle');
-    const articleBody = document.getElementById('articleBody');
-    const articleImage = document.getElementById('articleImage');
+    const postsGrid = document.getElementById('postsGrid');
     const token = sessionStorage.getItem('token');
+    const createPostButton = document.getElementById('createPostButton');
+    const createPostModal = document.getElementById('createPostModal');
+    const closeModal = document.querySelector('.close');
+    const createPostForm = document.getElementById('createPostForm');
+    const contentSection = document.querySelector('.content');
+    const successMessage = document.getElementById('successMessage');
+    let editorInstance;
 
     if (!token) {
         window.location.href = 'login.html'; // Redirect to login if not authenticated
         return;
     }
 
-    // Fetch the user's posts
-    fetch('http://localhost:8080/articles', {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(response => response.json())
-    .then(articles => {
-        postsList.innerHTML = '';
+    // Initialize CKEditor 5
+    ClassicEditor
+        .create(document.querySelector('#content'))
+        .then(editor => {
+            editorInstance = editor;
+        })
+        .catch(error => {
+            console.error('Error initializing CKEditor 5:', error);
+        });
 
-        if (articles.length === 0) {
-            postsList.innerHTML = '<li>You have not posted any articles yet.</li>';
-        } else {
-            articles.forEach(article => {
-                const li = document.createElement('li');
-                li.textContent = `${article.title} - ${article.subtitle}`;
-                li.dataset.articleId = article.id;
-                li.addEventListener('click', function () {
-                    displayArticleDetails(article.id);
+    // Fetch and display user's posts
+    function fetchPosts() {
+        fetch('http://localhost:8080/articles', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(articles => {
+            postsGrid.innerHTML = '';
+
+            if (articles.length === 0) {
+                postsGrid.innerHTML = '<p>You have not posted any articles yet.</p>';
+            } else {
+                articles.forEach(article => {
+                    const card = document.createElement('div');
+                    card.className = 'post-card';
+
+                    card.innerHTML = `
+                        <img src="${article.imageLink || 'default-image.jpg'}" alt="${article.title}">
+                        <h3>${article.title}</h3>
+                        <p>${article.subtitle}</p>
+                        <p>${article.body.substring(0, 100)}...</p>
+                        <a href="article.html?id=${article.id}" class="read-more">Read Full Article</a>
+                    `;
+
+                    postsGrid.appendChild(card);
                 });
-                postsList.appendChild(li);
-            });
-        }
-    })
-    .catch(error => {
-        console.error('Error fetching posts:', error);
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching posts:', error);
+        });
+    }
+
+    // Show modal on "Create New Post" button click
+    createPostButton.addEventListener('click', function () {
+        createPostModal.style.display = 'block';
+        contentSection.classList.add('blur');
     });
 
-    // Handle new post creation
+    // Close modal
+    closeModal.addEventListener('click', function () {
+        createPostModal.style.display = 'none';
+        contentSection.classList.remove('blur');
+    });
+
+    // Close modal when clicking outside of it
+    window.addEventListener('click', function (event) {
+        if (event.target == createPostModal) {
+            createPostModal.style.display = 'none';
+            contentSection.classList.remove('blur');
+        }
+    });
+
+    // Handle form submission
     createPostForm.addEventListener('submit', function (event) {
         event.preventDefault();
 
-        const newPost = {
+        // Ensure CKEditor content is synced with the textarea
+        editorInstance.updateSourceElement();
+
+        const formData = {
             title: document.getElementById('title').value,
             subtitle: document.getElementById('subtitle').value,
-            body: document.getElementById('body').value,
-            imageLink: document.getElementById('imageLink').value
+            imageLink: document.getElementById('imageLink').value,
+            body: editorInstance.getData()
         };
 
         fetch('http://localhost:8080/articles', {
@@ -60,67 +101,23 @@ document.addEventListener('DOMContentLoaded', function () {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(newPost)
-        })
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                throw new Error('Failed to create post');
-            }
-        })
-        .then(data => {
-            alert('Post created successfully!');
-            // Reload to see the new post
-            window.location.reload();
-        })
-        .catch(error => {
-            console.error('Error creating post:', error);
-            alert('Failed to create post.');
-        });
-    });
-
-    // Handle logout
-    document.getElementById('logoutButton').addEventListener('click', function () {
-        sessionStorage.clear();
-        window.location.href = 'login.html';
-    });
-
-    // Display article details
-    function displayArticleDetails(articleId) {
-        fetch(`http://localhost:8080/articles/${articleId}`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            }
+            body: JSON.stringify(formData)
         })
         .then(response => response.json())
         .then(article => {
-            articleTitle.textContent = article.title;
-            articleSubtitle.textContent = article.subtitle;
-            articleBody.textContent = article.body;
-            articleImage.src = article.imageLink;
-            articleDetails.style.display = 'block';
+            createPostModal.style.display = 'none';
+            contentSection.classList.remove('blur');
+            successMessage.style.display = 'block';
+            setTimeout(() => {
+                successMessage.style.display = 'none';
+            }, 3000);
+            fetchPosts();
         })
         .catch(error => {
-            console.error('Error fetching article details:', error);
+            console.error('Error creating post:', error);
         });
-    }
-
-    // Handle editing an article
-    document.getElementById('editArticleButton').addEventListener('click', function () {
-        // Implement edit functionality here
     });
 
-    // Handle deleting an article
-    document.getElementById('deleteArticleButton').addEventListener('click', function () {
-        // Implement delete functionality here
-    });
-
-    // Go back to dashboard
-    document.getElementById('backToDashboardButton').addEventListener('click', function () {
-        articleDetails.style.display = 'none';
-        postsList.style.display = 'block';
-    });
+    // Initial fetch of posts
+    fetchPosts();
 });

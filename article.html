@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Post</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            max-width: 800px;
+            margin: auto;
+            background-color: #f9f9f9;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        .image-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+        .meta-info {
+            color: #777;
+            margin-bottom: 20px;
+        }
+        .content {
+            line-height: 1.6;
+            color: #555;
+        }
+        #editModal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+        .modal-content {
+            background-color: #fff;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 10px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .edit-form label {
+            display: block;
+            margin-top: 10px;
+        }
+        .edit-form input,
+        .edit-form textarea {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            box-sizing: border-box;
+        }
+        .edit-form button {
+            margin-top: 15px;
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .edit-form button:hover {
+            background-color: #218838;
+        }
+        #editBtn {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        #editBtn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1 id="post-title">Loading...</h1>
+    <h2 id="post-subtitle"></h2>
+    <div class="image-container">
+        <img id="post-image" src="" alt="Article Image">
+    </div>
+    <p class="meta-info">By <span id="post-author">Author</span> on <span id="post-date">Date</span></p>
+    <div class="content" id="post-body"></div>
+    <button id="editBtn">Edit Article</button>
+
+    <!-- Edit Modal -->
+    <div id="editModal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Edit Article</h2>
+            <form class="edit-form" id="editForm">
+                <label for="edit-title">Title</label>
+                <input type="text" id="edit-title" name="title" required>
+
+                <label for="edit-subtitle">Subtitle</label>
+                <input type="text" id="edit-subtitle" name="subtitle">
+
+                <label for="edit-body">Body</label>
+                <textarea id="edit-body" name="body" rows="6" required></textarea>
+
+                <label for="edit-imageLink">Image Link</label>
+                <input type="text" id="edit-imageLink" name="imageLink">
+
+                <button type="submit">Save Changes</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const baseURL = 'http://localhost:8080';
+        // Function to get the 'id' parameter from the URL
+        function getArticleIdFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('id');
+        }
+
+        // Function to fetch article by ID
+        async function fetchArticleById(id) {
+            try {
+                const response = await fetch(baseURL+`/articles/${id}`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch the article');
+                }
+                const article = await response.json();
+                displayArticle(article);
+                populateEditModal(article);
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('post-title').innerText = 'Failed to load article';
+            }
+        }
+
+        // Function to display the fetched article
+        function displayArticle(article) {
+            document.getElementById('post-title').innerText = article.title;
+            document.getElementById('post-subtitle').innerText = article.subtitle;
+            document.getElementById('post-image').src = article.imageLink || 'default-image.jpg';
+            document.getElementById('post-author').innerText = article.author.username;
+            document.getElementById('post-date').innerText = new Date(article.createdAt).toLocaleDateString();
+            document.getElementById('post-body').innerHTML = article.body;
+        }
+
+        // Function to populate the edit modal with article data
+        function populateEditModal(article) {
+            document.getElementById('edit-title').value = article.title;
+            document.getElementById('edit-subtitle').value = article.subtitle;
+            document.getElementById('edit-body').value = article.body;
+            document.getElementById('edit-imageLink').value = article.imageLink;
+        }
+
+        // Function to update the article
+        async function updateArticle(id, updatedData) {
+            try {
+                console.log('token:',sessionStorage.getItem('token'));
+                const response = await fetch(baseURL+`/articles/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer '+sessionStorage.getItem('token') // Assuming token is stored in localStorage
+                    },
+                    body: JSON.stringify(updatedData)
+                });
+                if (!response.ok) {
+                    throw new Error('Failed to update the article');
+                }
+                const updatedArticle = await response.json();
+                displayArticle(updatedArticle);
+                closeModal();
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        // Modal controls
+        const modal = document.getElementById('editModal');
+        const btn = document.getElementById('editBtn');
+        const span = document.getElementsByClassName('close')[0];
+
+        // When the user clicks the button, open the modal
+        btn.onclick = function() {
+            modal.style.display = 'block';
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+            modal.style.display = 'none';
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // Function to close the modal
+        function closeModal() {
+            modal.style.display = 'none';
+        }
+
+        // Handle form submission
+        document.getElementById('editForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const articleId = getArticleIdFromUrl();
+            const updatedData = {
+                title: document.getElementById('edit-title').value,
+                subtitle: document.getElementById('edit-subtitle').value,
+                body: document.getElementById('edit-body').value,
+                imageLink: document.getElementById('edit-imageLink').value
+            };
+            updateArticle(articleId, updatedData);
+        });
+
+        // Get the article ID from the URL and fetch the article
+        const articleId = getArticleIdFromUrl();
+        if (articleId) {
+            fetchArticleById(articleId);
+        } else {
+            document.getElementById('post-title').innerText = 'Article ID not found';
+        }
+    </script>
+</body>
+</html>

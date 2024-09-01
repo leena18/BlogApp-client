@@ -1,129 +1,141 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 0;
-}
-
-header {
-    background-color: #333;
-    color: white;
-    padding: 10px;
-    text-align: center;
-    position: relative;
-}
-
-header h1 {
-    margin: 0;
-}
-
-#logoutButton {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background-color: #f44336;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    cursor: pointer;
-    border-radius: 3px;
-}
-
-#logoutButton:hover {
-    background-color: #d32f2f;
-}
-
-.content {
+/* Navbar */
+.navbar {
     display: flex;
     justify-content: space-between;
-    margin: 20px;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #f8f9fa;
 }
 
-.post-list, .create-post {
-    background-color: white;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    width: 45%;
-}
-
-.post-list ul {
-    list-style: none;
-    padding: 0;
-}
-
-.post-list li {
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-    cursor: pointer;
-}
-
-.post-list li:hover {
-    background-color: #f0f0f0;
-}
-
-.post-list li:last-child {
-    border-bottom: none;
-}
-
-.create-post form {
+.navbar-left {
     display: flex;
-    flex-direction: column;
+    align-items: center;
 }
 
-.create-post label {
-    margin-bottom: 5px;
+.logo {
+    height: 40px;
+    margin-right: 20px;
 }
 
-.create-post input, .create-post textarea {
-    margin-bottom: 15px;
-    padding: 8px;
-    border-radius: 3px;
-    border: 1px solid #ddd;
-    width: 100%;
+.navbar-right {
+    display: flex;
+    align-items: center;
 }
 
-.create-post button {
-    padding: 10px;
-    background-color: #4CAF50;
-    color: white;
+.nav-link {
+    margin-right: 20px;
+    text-decoration: none;
+    color: #333;
+}
+
+.nav-button {
+    background-color: #000;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 20px;
     border: none;
-    border-radius: 3px;
     cursor: pointer;
+    margin-right: 20px;
 }
 
-.create-post button:hover {
-    background-color: #45a049;
+.logout-button {
+    margin-right: 0;
 }
 
-#article-details {
-    background-color: white;
+/* Content */
+.content {
     padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.content h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Posts Grid */
+.posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 26px;
+}
+
+/* Post Card */
+.post-card {
+    border: 1px solid #ddd;
     border-radius: 5px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    width: 45%;
-    display: none;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    transition: transform 0.3s;
 }
 
-#article-details h2 {
-    margin-top: 0;
+.post-card:hover {
+    transform: translateY(-5px);
 }
 
-#article-details img {
-    max-width: 100%;
+.post-card img {
+    width: 100%;
     height: auto;
 }
 
-#article-details button {
-    margin-right: 10px;
-    padding: 10px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 3px;
+.post-card h3 {
+    padding: 10px 15px;
+    margin: 0;
+    font-size: 1.25em;
+    color: #333;
     cursor: pointer;
 }
 
-#article-details button:hover {
-    background-color: #45a049;
+.post-card p {
+    padding: 0 15px 10px;
+    color: #666;
+}
+
+.read-more {
+    display: block;
+    padding: 10px 15px;
+    background-color: #000;
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding-top: 60px;
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 10px;
+}
+
+/* Success Message */
+.success-message {
+    display: none;
+    color: green;
+    margin-top: 10px;
+}
+
+/* Blur Effect */
+.blur {
+    filter: blur(5px);
 }
