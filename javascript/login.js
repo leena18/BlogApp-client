@@ -36,7 +36,7 @@ document.getElementById('login-form').addEventListener('submit', function(event)
         };
 
         // Send login request to the server
-        fetch('http://blogapp-server-production.up.railway.app/users/login', {
+        fetch('https://blogapp-server-production.up.railway.app/users/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

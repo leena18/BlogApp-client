@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Fetch all articles
-    fetch('http://blogapp-server-production.up.railway.app/articles')
+    fetch('https://blogapp-server-production.up.railway.app/articles')
         .then(response => response.json())
         .then(data => {
             if (data.length > 0) {

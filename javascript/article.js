@@ -1,4 +1,4 @@
-const baseURL = 'http://blogapp-server-production.up.railway.app';
+const baseURL = 'https://blogapp-server-production.up.railway.app';
 let articleEntity = {};
 
 // Function to get the 'id' parameter from the URL

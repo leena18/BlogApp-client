@@ -28,7 +28,7 @@ document.getElementById('registerForm').addEventListener('submit', async functio
         return;
     }
 
-    const response = await fetch('http://blogapp-server-production.up.railway.app/users', {
+    const response = await fetch('https://blogapp-server-production.up.railway.app/users', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
