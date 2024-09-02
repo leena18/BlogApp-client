@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Fetch and display user's posts
     function fetchPosts() {
-        fetch('http://localhost:8080/articles', {
+        fetch('http://blogapp-server-production.up.railway.app/articles', {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', function () {
             body: editorInstance.getData()
         };
 
-        fetch('http://localhost:8080/articles', {
+        fetch('http://blogapp-server-production.up.railway.app/articles', {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -137,6 +137,7 @@ document.addEventListener('DOMContentLoaded', function () {
             console.error('Error fetching user articles:', error);
         }
     }
+
 
     // Initial fetch of posts
     fetchPosts();
