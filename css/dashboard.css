@@ -63,6 +63,7 @@
 
 .big-section {
     background-color: #7fa99b;
+    min-height: 100vh;
 }
 
 /* Content */

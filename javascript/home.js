@@ -4,8 +4,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const hamburger = document.querySelector('.hamburger');
     const navLinks = document.querySelector('.nav-links');
 
-      // Check if the elements exist before adding event listeners
-      if (hamburger && navLinks) {
+    // Check if the elements exist before adding event listeners
+    if (hamburger && navLinks) {
         // Toggle the navigation menu on click of the hamburger icon
         hamburger.addEventListener('click', () => {
             navLinks.classList.toggle('active');
@@ -59,7 +59,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 readMoreLink.classList.add('read-more');
                 readMoreLink.textContent = 'Read Full Article';
 
-                console.log(featuredArticle);
                 // Add author name
                 const authorName = document.createElement('p');
                 authorName.classList.add('author-name');
@@ -89,6 +88,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 const postCard = document.createElement('div');
                 postCard.classList.add('post-card');
 
+                console.log(article);
+                
+
                 // Add image
                 const postImage = document.createElement('img');
                 postImage.classList.add('post-image');
@@ -113,16 +115,25 @@ document.addEventListener('DOMContentLoaded', function() {
                 const previewText = article.body.substring(0, 100) + '...';
                 postBodyPreview.textContent = previewText;
 
+                // Add "Read Full Article" link
+                const readMoreLink = document.createElement('a');
+                readMoreLink.href = `article.html?id=${article.id}`; // Link to the full article
+                readMoreLink.classList.add('read-more');
+                readMoreLink.textContent = 'Read Full Article';
+
                 // Add author name
                 const authorName = document.createElement('p');
                 authorName.classList.add('author-name');
-                authorName.textContent = `By ${article.author.name}`;
+                authorName.classList.add('author-name');
+                authorName.textContent = `By ${article.author && article.author.username ? article.author.username : 'Unknown Author'}`;
+
 
                 // Append elements to post card
                 postCard.appendChild(postImage);
                 postCard.appendChild(postTitle);
                 postCard.appendChild(postSubtitle);
                 postCard.appendChild(postBodyPreview);
+                postCard.appendChild(readMoreLink);
                 postCard.appendChild(authorName);
 
                 // Append post card to container

@@ -4,7 +4,9 @@ let articleEntity = {};
 // Function to get the 'id' parameter from the URL
 function getArticleIdFromUrl() {
     const urlParams = new URLSearchParams(window.location.search);
+    modal.style.display='none';
     return urlParams.get('id');
+    
 }
 
 // Function to fetch article by ID
@@ -17,7 +19,6 @@ async function fetchArticleById(id) {
         const article = await response.json();
         articleEntity = article;
         displayArticle(article);
-        populateEditModal(article);
         fetchComments(article.slug);
     } catch (error) {
         console.error('Error:', error);
@@ -93,7 +94,8 @@ const span = document.getElementsByClassName('close')[0];
 
 // When the user clicks the edit button, open the modal
 editBtn.onclick = function () {
-    modal.style.display = 'block';
+    populateEditModal(articleEntity); // Populate the modal with article data
+    modal.style.display = 'flex'; // Display the modal
 }
 
 // When the user clicks the delete button, confirm and delete the article

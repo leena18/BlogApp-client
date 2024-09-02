@@ -13,9 +13,8 @@ body {
     padding: 10px 40px;
     background-color: #7fa99b; /* Use second-color for container background */
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 8px rgba(0, 0.7, 0, 1);
 }
-
 h1 {
     color: #394a51; /* Use first-color for headings */
     margin-bottom: 20px;
@@ -90,10 +89,6 @@ h1 {
 
 /* For tablets and larger phones */
 @media (max-width: 768px) {
-    .container {
-        padding: 20px;
-    }
-
     h1 {
         font-size: 1.5rem;
     }
@@ -111,9 +106,7 @@ h1 {
 
 /* For small screens and mobile devices */
 @media (max-width: 480px) {
-    .container {
-        padding: 10px;
-    }
+
 
     h1 {
         font-size: 1.25rem;

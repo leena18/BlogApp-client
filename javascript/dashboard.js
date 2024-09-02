@@ -33,18 +33,23 @@ document.addEventListener('DOMContentLoaded', function () {
                 'Content-Type': 'application/json'
             }
         })
-        .then(response => response.json())
-        .then(articles => {
-            postsGrid.innerHTML = '';
+            .then(response => response.json())
+            .then(articles => {
+                postsGrid.innerHTML = '';
+                console.log("user", sessionStorage.getItem('username'));
 
-            if (articles.length === 0) {
-                postsGrid.innerHTML = '<p>You have not posted any articles yet.</p>';
-            } else {
-                articles.forEach(article => {
-                    const card = document.createElement('div');
-                    card.className = 'post-card';
+                console.log(articles);
 
-                    card.innerHTML = `
+
+                if (articles.length === 0) {
+                    postsGrid.innerHTML = '<p>You have not posted any articles yet.</p>';
+                } {
+                    articles.forEach(article => {
+                        if (article.author.username === sessionStorage.getItem('username')) {
+                            const card = document.createElement('div');
+                            card.className = 'post-card';
+
+                            card.innerHTML = `
                         <img src="${article.imageLink || 'default-image.jpg'}" alt="${article.title}">
                         <h3>${article.title}</h3>
                         <p>${article.subtitle}</p>
@@ -52,13 +57,15 @@ document.addEventListener('DOMContentLoaded', function () {
                         <a href="article.html?id=${article.id}" class="read-more">Read Full Article</a>
                     `;
 
-                    postsGrid.appendChild(card);
-                });
-            }
-        })
-        .catch(error => {
-            console.error('Error fetching posts:', error);
-        });
+                            postsGrid.appendChild(card);
+                        }
+
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching posts:', error);
+            });
     }
 
     // Show modal on "Create New Post" button click
@@ -103,20 +110,33 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             body: JSON.stringify(formData)
         })
-        .then(response => response.json())
-        .then(article => {
-            createPostModal.style.display = 'none';
-            contentSection.classList.remove('blur');
-            successMessage.style.display = 'block';
-            setTimeout(() => {
-                successMessage.style.display = 'none';
-            }, 3000);
-            fetchPosts();
-        })
-        .catch(error => {
-            console.error('Error creating post:', error);
-        });
+            .then(response => response.json())
+            .then(article => {
+                createPostModal.style.display = 'none';
+                contentSection.classList.remove('blur');
+                successMessage.style.display = 'block';
+                setTimeout(() => {
+                    successMessage.style.display = 'none';
+                }, 3000);
+                fetchPosts();
+            })
+            .catch(error => {
+                console.error('Error creating post:', error);
+            });
     });
+    // Function to fetch and display the logged-in user's articles
+    async function fetchUserArticles() {
+        try {
+            const response = await fetch('/user/articles');
+            if (!response.ok) {
+                throw new Error('Failed to fetch user articles');
+            }
+            const articles = await response.json();
+            displayArticles(articles);
+        } catch (error) {
+            console.error('Error fetching user articles:', error);
+        }
+    }
 
     // Initial fetch of posts
     fetchPosts();

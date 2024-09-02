@@ -167,7 +167,8 @@ body {
 
 .author-name {
     font-size: 14px;
-    color: #999;
+    color: #fff;
+    font-weight: 900;
     margin-top: 10px;
 }
 
@@ -179,6 +180,10 @@ body {
     padding: 20px 0;
 }
 
+.post-card h3{
+    color: #fbf2d5; /* Use third-color for post titles */
+    cursor: pointer;
+}
 .post-card {
     background-color: #7fa99b; /* Use second-color for post card background */
     padding: 20px;
@@ -263,16 +268,18 @@ body {
         grid-template-columns: 1fr;
     }
 
-    .post-card {
+    /* .post-card {
         padding: 15px;
-    }
+    } */
 }
 
 @media (max-width: 480px) {
     .navbar {
         padding: 0 10px;
     }
-
+    .posts{
+        padding: 0;
+    }
     .logo img {
         height: 80px;
         align-self: center;
